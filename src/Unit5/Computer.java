@@ -8,13 +8,15 @@ public class Computer {
     String ram;
     String ssd;
     int onOffResource;
+    boolean onOffStatus = false;
     Random rd = new Random();
     Scanner sc = new Scanner(System.in);
 
-    Computer(int onOffResource){
-        this.onOffResource = onOffResource ;
+    Computer(int onOffResource) {
+        this.onOffResource = onOffResource;
     }
-    Computer(String processor, String ram, String ssd,int onOffResource) {
+
+    Computer(String processor, String ram, String ssd, int onOffResource) {
         this(onOffResource);
         this.processor = processor;
         this.ram = ram;
@@ -30,7 +32,7 @@ public class Computer {
     }
 
     void on() {
-        if (onOffResource != 0) {
+        if (onOffResource != 0 && !onOffStatus) {
             System.out.println("Включаем " + this.processor + " компьютер");
             int random = rd.nextInt(2);
             System.out.println("Для включения угадайте 1 или 0?");
@@ -48,17 +50,21 @@ public class Computer {
             if (random == guess) {
                 System.out.println("Компьютер включен");
                 onOffResource--;
+                onOffStatus = true;
                 System.out.println("Количество возможных вкл/выкл = " + onOffResource);
             } else {
                 System.out.println("Компу конец");
+                onOffResource = 0;
             }
+        } else if (onOffStatus && onOffResource !=0) {
+            System.out.println("Компьютер уже включен");
         } else {
-            System.out.println("У " + this.processor + "Лимит вкл/выкл исчерпан");
+            System.out.println("У " + this.processor + " Лимит вкл/выкл исчерпан");
         }
     }
 
     void off() {
-        if (onOffResource != 0) {
+        if (onOffResource != 0 && onOffStatus) {
             System.out.println("Выключаем " + this.processor + " компьютер");
             int random = rd.nextInt(2);
             System.out.println("Для выключения угадайте 1 или 0?");
@@ -75,13 +81,17 @@ public class Computer {
             }
             if (random == guess) {
                 System.out.println("Компьютер выключен");
+                onOffStatus = false;
                 onOffResource--;
                 System.out.println("Количество возможных вкл/выкл = " + onOffResource);
             } else {
                 System.out.println("Компу конец");
+                onOffResource = 0;
             }
+        } else if (!onOffStatus && onOffResource !=0) {
+            System.out.println("Компьютер уже выключен");
         } else {
-            System.out.println("У " + this.processor + "Лимит вкл/выкл исчерпан");
+            System.out.println("У " + this.processor + " Лимит вкл/выкл исчерпан");
         }
     }
 
@@ -91,9 +101,9 @@ public class Computer {
         computer.display();
         computer1.display();
         computer.on();
-        computer1.on();
+        computer.on();
         computer.off();
-        computer1.off();
+        computer.off();
     }
 }
 
