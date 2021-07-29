@@ -3,21 +3,16 @@ package Unit6;
 public class CargoCar extends GroundTransport {
     int loadCapacity;
 
-    CargoCar(Brand brand, int loadCapacity, double horsePower, int maxSpeed, double mass, int numberOfWheels, double fuelRate) {
-        this.brand = brand;
+    public CargoCar(double horsePower, int maxSpeed, double mass, Brand brand, int numberOfWheels, double fuelRate, int loadCapacity) {
+        super(horsePower, maxSpeed, mass, brand, numberOfWheels, fuelRate);
         this.loadCapacity = loadCapacity;
-        this.horsePower = horsePower;
-        this.maxSpeed = maxSpeed;
-        this.mass = mass;
-        this.numberOfWheels = numberOfWheels;
-        this.fuelRate = fuelRate;
     }
 
+    @Override
     public void display() {
-        System.out.printf("Марка %s, количество груза %s, \n", brand, loadCapacity);
-        System.out.printf("мощность %s лс, макс скорость %s, масса %s, \n", horsePower, maxSpeed, mass);
-        System.out.printf("количество колёс %s, расход топлива %s. \n", numberOfWheels, fuelRate);
-        System.out.println("Мощность в киловаттах " + kWpower());
+        super.display();
+        System.out.printf("макс количество загрузки %s кг, \n", loadCapacity);
+        System.out.println("Мощность в киловаттах " + kWPower());
         System.out.println();
     }
 

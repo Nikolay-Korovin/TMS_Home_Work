@@ -4,22 +4,24 @@ public class CivilAir extends AirTransport {
     int numberOfPassengers;
     boolean isBusinessClass;
 
-    CivilAir(Brand brand, double horsePower, int maxSpeed, double mass, boolean isBusinessClass, int numberOfPassengers, int wingSpan, int minRunwayLength) {
-        this.brand = brand;
-        this.horsePower = horsePower;
-        this.maxSpeed = maxSpeed;
-        this.mass = mass;
+
+    public CivilAir(double horsePower, int maxSpeed, double mass, Brand brand, int wingSpan, int minRunwayLength, int numberOfPassengers, boolean isBusinessClass) {
+        super(horsePower, maxSpeed, mass, brand, wingSpan, minRunwayLength);
         this.numberOfPassengers = numberOfPassengers;
         this.isBusinessClass = isBusinessClass;
-        this.wingSpan = wingSpan;
-        this.minRunwayLength = minRunwayLength;
     }
 
+    @Override
     public void display() {
-        System.out.printf("Марка %s, бизнес класс: %s, кол. пассажиров %s, \n", brand, isBusinessClass, numberOfPassengers);
-        System.out.printf("мощность %s лс, макс скорость %s, масса %s, \n", horsePower, maxSpeed, mass);
-        System.out.printf("размах крыльев %s, минимальная длинна взлёта %s м. \n", wingSpan, minRunwayLength);
-        System.out.println("Мощность в киловаттах " + kWpower());
+        YesNo s;
+        if (isBusinessClass) {
+            s = YesNo.ДА;
+        } else {
+            s = YesNo.НЕТ;
+        }
+        super.display();
+        System.out.printf("бизнес класс: %s, кол. пассажиров %s. \n", s, numberOfPassengers);
+        System.out.println("Мощность в киловаттах " + kWPower());
         System.out.println();
     }
 

@@ -4,22 +4,22 @@ public class MilitaryAir extends AirTransport {
     boolean isCatapult;
     int numberOfRockets;
 
-    MilitaryAir(Brand brand, double horsePower, int maxSpeed, double mass, boolean isCatapult, int numberOfRockets, int wingSpan, int minRunwayLength) {
-        this.brand = brand;
-        this.horsePower = horsePower;
-        this.maxSpeed = maxSpeed;
-        this.mass = mass;
+    public MilitaryAir(double horsePower, int maxSpeed, double mass, Brand brand, int wingSpan, int minRunwayLength, boolean isCatapult, int numberOfRockets) {
+        super(horsePower, maxSpeed, mass, brand, wingSpan, minRunwayLength);
         this.isCatapult = isCatapult;
         this.numberOfRockets = numberOfRockets;
-        this.wingSpan = wingSpan;
-        this.minRunwayLength = minRunwayLength;
     }
 
     public void display() {
-        System.out.printf("Марка %s, катапульта: %s, кол. ракет %s, \n", brand, isCatapult, numberOfRockets);
-        System.out.printf("мощность %s лс, макс скорость %s, масса %s, \n", horsePower, maxSpeed, mass);
-        System.out.printf("размах крыльев %s, минимальная длинна взлёта %s. \n", wingSpan, minRunwayLength);
-        System.out.println("Мощность в киловаттах " + kWpower());
+        YesNo s;
+        if (isCatapult) {
+            s = YesNo.ДА;
+        } else {
+            s = YesNo.НЕТ;
+        }
+        super.display();
+        System.out.printf("катапульта: %s, кол. ракет %s шт. \n", s, numberOfRockets);
+        System.out.println("Мощность в киловаттах " + kWPower());
         System.out.println();
     }
 
