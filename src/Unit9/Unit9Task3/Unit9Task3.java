@@ -4,6 +4,7 @@ package Unit9.Unit9Task3;
 // После запуска программы должен создать файл, который будет содержать в себе только полиндромы.
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
@@ -16,7 +17,7 @@ public class Unit9Task3 {
     }
 
     public static StringBuilder readString(StringBuilder stringBuilder2) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(FILENAME), StandardCharsets.UTF_8));
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(FILENAME), "cp1251"));
         FileWriter fw = null;
         String currentLine;
         boolean isNewFileCreated = false;
@@ -28,6 +29,7 @@ public class Unit9Task3 {
             stringBuilder1 = new StringBuilder(currentLine);
             if (!isNewFileCreated && stringBuilder.toString().equals((stringBuilder1.reverse()).toString())) {
                 File file = new File(FILENAME2);
+
                 fw = new FileWriter(file);
                 isNewFileCreated = true;
             }
@@ -40,7 +42,7 @@ public class Unit9Task3 {
     }
 
     public static void writeStringToFile(String fileName, String str) throws IOException {
-        FileWriter fw = new FileWriter(fileName, StandardCharsets.UTF_8);
+        FileWriter fw = new FileWriter(fileName, Charset.defaultCharset());//FileWriter(fileName, "cp1251");
         String[] arrayWords = str.split("\\s+");
         for (String s : arrayWords) {
             fw.write(s + "\n");
