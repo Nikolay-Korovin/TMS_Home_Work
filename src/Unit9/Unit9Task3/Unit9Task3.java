@@ -3,22 +3,20 @@ package Unit9.Unit9Task3;
 //В исходном файле находятся слова, каждое слово на новой строке.
 // После запуска программы должен создать файл, который будет содержать в себе только полиндромы.
 
-//как то работает
-
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 public class Unit9Task3 {
     static final String FILENAME = "src\\Unit9\\Unit9Task3\\SourceFile.txt";
     static final String FILENAME2 = "src\\Unit9\\Unit9Task3\\DestinationFile.txt";
 
     public static void main(String[] args) throws InterruptedException, IOException {
-
         writeStringToFile(FILENAME2, readString(new StringBuilder()).toString());
-
     }
 
     public static StringBuilder readString(StringBuilder stringBuilder2) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(FILENAME), "cp1251"));
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(FILENAME), StandardCharsets.UTF_8));
         FileWriter fw = null;
         String currentLine;
         boolean isNewFileCreated = false;
@@ -42,11 +40,12 @@ public class Unit9Task3 {
     }
 
     public static void writeStringToFile(String fileName, String str) throws IOException {
-        FileWriter fw = new FileWriter(fileName);
+        FileWriter fw = new FileWriter(fileName, StandardCharsets.UTF_8);
         String[] arrayWords = str.split("\\s+");
         for (String s : arrayWords) {
             fw.write(s + "\n");
         }
         fw.close();
     }
+
 }
