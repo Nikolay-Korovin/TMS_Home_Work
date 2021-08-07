@@ -42,7 +42,7 @@ public class Unit9Task3 {
     }
 
     public static void writeStringToFile(String fileName, String str) throws IOException {
-        FileWriter fw = new FileWriter(fileName, Charset.defaultCharset());//FileWriter(fileName, "cp1251");
+        FileWriter fw = new FileWriter(fileName);
         String[] arrayWords = str.split("\\s+");
         for (String s : arrayWords) {
             fw.write(s + "\n");
