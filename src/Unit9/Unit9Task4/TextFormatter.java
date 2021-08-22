@@ -43,8 +43,6 @@ public class TextFormatter {
 
     public static boolean isPalindrome(String str) {
         StringBuilder stringBuilder = new StringBuilder(str.toLowerCase());
-        //StringBuilder stringBuilder1 = new StringBuilder(str.toLowerCase());
-        //if (stringBuilder.length() >= 3 && stringBuilder.toString().equals(stringBuilder1.toString())) {
         if (stringBuilder.reverse().toString().equals(str.toLowerCase())) {
             return true;
         } else {
