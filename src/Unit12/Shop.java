@@ -1,10 +1,9 @@
 package Unit12;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Shop {
-    private ArrayList<Product> productArrayList;
+    private final ArrayList<Product> productArrayList;
 
     public Shop(ArrayList<Product> productArrayList) {
         this.productArrayList = productArrayList;

@@ -2,7 +2,6 @@ package Unit12;
 
 import java.util.*;
 import java.util.ArrayList;
-import java.util.Comparator;
 
 public class Menu {
     Scanner sc = new Scanner(System.in);

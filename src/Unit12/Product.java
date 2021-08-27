@@ -1,9 +1,10 @@
 package Unit12;
 
 
+import org.jetbrains.annotations.NotNull;
+
 import java.time.LocalDateTime;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 public class Product implements Comparable<Product> {
@@ -12,7 +13,6 @@ public class Product implements Comparable<Product> {
     private int price;
     private LocalDateTime dateOfAdd;
 
-    public Product() { }
     public Product(int id, String name, int price) {
         this.id = id;
         this.name = name;
