@@ -1,15 +1,16 @@
-package Unit12;
+package Shop;
 
+import java.io.*;
 import java.util.*;
 import java.util.ArrayList;
 
 public class Menu {
     Scanner sc = new Scanner(System.in);
-    Shop shop = new Shop(new ArrayList<>());
+    Shop shop = new Shop();
 
     //главное меню
-    public void startShop() {
-
+    private void startShop() {
+        loadProducts();
         System.out.println("Добро пожаловать в меню магазина!");
         System.out.println("Что бы вы хотели сделать?(введите цифру соответствующую пункту в меню)");
 
@@ -20,7 +21,8 @@ public class Menu {
             System.out.println("2. Добавление товара.");
             System.out.println("3. Редактирование товара.");
             System.out.println("4. Удаление товара.");
-            System.out.println("5. Выход.");
+            System.out.println("5. Сохранить.");
+            System.out.println("6. Выйти.");
 
             if (sc.hasNextInt()) {
                 choose = sc.nextInt();
@@ -37,23 +39,29 @@ public class Menu {
             } else if (choose == 4) {
                 deleteProduct();
             } else if (choose == 5) {
+                System.out.println("записали в базу");
+                saveProducts();
+            } else if (choose == 6) {
                 System.out.println("ВЫХОД");
+                saveProducts();
                 break;
             } else {
                 System.out.println("Введите корректный номер из меню");
             }
         }
     }
+
     //выбор вариантов сортировки перед показом всего магазина
-    public void showAllProducts() {
+    private void showAllProducts() {
         int choose = 0;
 
         while (true) {
             System.out.println("Как сортируем?");
             System.out.println("1. По цене (возрастание).");
             System.out.println("2. По цене (убывание).");
-            System.out.println("3. По дате добавления.");
-            System.out.println("4. Назад.");
+            System.out.println("3. По цене (выбрать от и до).");
+            System.out.println("4. По дате добавления.");
+            System.out.println("5. Назад.");
 
             if (sc.hasNextInt()) {
                 choose = sc.nextInt();
@@ -70,19 +78,28 @@ public class Menu {
                 Product.priceSortDOWN(shop.getAllProducts());
                 break;
             } else if (choose == 3) {
+                System.out.println("выводим по цене (введите нижнюю и верхнюю границы цен)");
+                System.out.print("от: ");
+                int lowPrice = getPriceFromUser();
+                System.out.print("до: ");
+                int highPrice = getPriceFromUser();
+                Product.priceSortChoose(shop.getAllProducts(), lowPrice, highPrice);
+                break;
+            } else if (choose == 4) {
                 System.out.println("выводим по дате добавления");
                 Product.dateSort(shop.getAllProducts());
                 break;
-            } else if (choose == 4) {
-                System.out.println("ВЫХОД");
+            } else if (choose == 5) {
+                System.out.println("выходим в главное меню");
                 break;
             } else {
                 System.out.println("Введите корректный номер из меню");
             }
         }
     }
+
     //изменить продукт по ID
-    public void changeProduct() {
+    private void changeProduct() {
         System.out.println("редактируем товар по id");
         System.out.println("Введите id, новое название, новую цену");
 
@@ -95,8 +112,9 @@ public class Menu {
 
         shop.changeProduct(new Product(id, name, price));
     }
+
     //добавить продукт
-    public void addProduct() {
+    private void addProduct() {
         System.out.println("Добавляем товар");
         System.out.println("Введите id, название, цену");
 
@@ -109,8 +127,9 @@ public class Menu {
 
         shop.addProduct(new Product(id, name, price));
     }
+
     //удалить продукт
-    public void deleteProduct() {
+    private void deleteProduct() {
         System.out.println("удаляем товар товар");
         System.out.println("Введите id");
 
@@ -119,8 +138,9 @@ public class Menu {
 
         shop.delProdByID(id);
     }
+
     //запрос айди для метода (добавить продукт)
-    public int getIDFromUserForAdd() {
+    private int getIDFromUserForAdd() {
         int tempID;
 
         while (true) {
@@ -140,8 +160,9 @@ public class Menu {
             }
         }
     }
+
     //запрос айди для методов(изменить удалить продукт)
-    public int getIDFromUserForChangeAndDelete() {
+    private int getIDFromUserForChangeAndDelete() {
         int tempID;
 
         while (true) {
@@ -161,8 +182,9 @@ public class Menu {
             }
         }
     }
+
     //ввести имя продукта
-    public String getNameFromUser() {//можно ещё сделать что бы принимало через пробел
+    private String getNameFromUser() {//можно ещё сделать что бы принимало через пробел
         while (true) {
             if (sc.hasNext()) {
                 return sc.next();
@@ -172,8 +194,9 @@ public class Menu {
             }
         }
     }
+
     //ввести цену продукта
-    public int getPriceFromUser() {
+    private int getPriceFromUser() {
         while (true) {
             if (sc.hasNextInt()) {
                 return sc.nextInt();
@@ -183,21 +206,33 @@ public class Menu {
             }
         }
     }
-    //существует ли такой айди?
-    public boolean isID(int id) {
-        for (Product product : shop.getAllProducts()) {
-            if (product.getId() == id) {
-                return true;
-            }
+
+    //проверяет есть ли такой ID
+    private boolean isID(int id) {
+        Optional<Product> isSomethingFind = shop.getAllProducts().stream().filter(product1 -> product1.getId() == id).findAny();
+        return isSomethingFind.isPresent();
+    }
+
+    //сохранение списка товаров в файл
+    private void saveProducts() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/Unit12/file.dat"))) {
+            oos.writeObject(shop.getAllProducts());
+        } catch (IOException e) {
+            System.out.println("Что то пошло не так");
         }
-        return false;
+    }
+
+    //загрузка списка товаров из файла
+    private void loadProducts() {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("src/Unit12/file.dat"))) {
+            shop.productArrayList = (ArrayList) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Что то пошло не так");
+        }
     }
 
     public static void main(String[] args) {
         Menu menu = new Menu();
-        menu.shop.addProduct(new Product(1, "а", 1000));
-        menu.shop.addProduct(new Product(2, "б", 10));
-        menu.shop.addProduct(new Product(3, "в", 1));
         menu.startShop();
     }
 }
