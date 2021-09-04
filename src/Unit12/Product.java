@@ -1,13 +1,12 @@
 package Unit12;
 
-
-import org.jetbrains.annotations.NotNull;
-
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 
-public class Product implements Comparable<Product> {
+
+public class Product implements Serializable {
     private int id;
     private String name;
     private int price;
@@ -19,44 +18,58 @@ public class Product implements Comparable<Product> {
         this.price = price;
     }
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
+
     public void setId(int id) {
         this.id = id;
     }
+
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public int getPrice() {
         return price;
     }
+
     public void setPrice(int price) {
         this.price = price;
     }
+
     public LocalDateTime getTimeOfAdd() {
         return dateOfAdd;
     }
+    //почему то не получилось в скобках сделать LocalDateTime.now() не видит .now
     public void setTimeOfAdd() {
         this.dateOfAdd = LocalDateTime.now();
     }
 
     public static void priceSortUP(final List<Product> product) {
         product.sort(Comparator.comparing(Product::getPrice));
-        System.out.println(product);
+        product.forEach(System.out::println);
         System.out.println();
     }
+
     public static void priceSortDOWN(final List<Product> product) {
         product.sort(Comparator.comparing(Product::getPrice).reversed());
-        System.out.println(product);
+        product.forEach(System.out::println);
         System.out.println();
     }
+
+    public static void priceSortChoose(final List<Product> products, int lowPrice, int highPrice) {
+
+        products.stream()
+                .filter(product -> product.getPrice() >= lowPrice && product.getPrice() <= highPrice)
+                .forEach(System.out::println);
+    }
+
     public static void dateSort(final List<Product> product) {
         product.sort(Comparator.comparing(Product::getTimeOfAdd).reversed());
-        System.out.println(product);
+        product.forEach(System.out::println);
         System.out.println();
     }
 
@@ -68,10 +81,5 @@ public class Product implements Comparable<Product> {
                 ", price=" + price +
                 ", timeOfAdd=" + dateOfAdd +
                 '}';
-    }
-
-    @Override
-    public int compareTo(Product product) {
-        return 0;
     }
 }

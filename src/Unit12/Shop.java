@@ -1,41 +1,26 @@
 package Unit12;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class Shop {
-    private final ArrayList<Product> productArrayList;
-
-    public Shop(ArrayList<Product> productArrayList) {
-        this.productArrayList = productArrayList;
-    }
+    public List<Product> productArrayList = new ArrayList<>();
 
     public void addProduct(Product product) {
-        boolean condition = false;
-        for (Product product1 : productArrayList) {
-            if (product1.getId() == product.getId()) {
-                condition = true;
-                break;
-            }
-        }
-        if (!condition) {
+        Optional<Product> isSomethingFind = productArrayList.stream().filter(product1 -> product1.getId() == product.getId()).findAny();
+        if (isSomethingFind.isEmpty()) {
             product.setTimeOfAdd();
             productArrayList.add(product);
         }
     }
 
-    public ArrayList<Product> getAllProducts() {
+    public List<Product> getAllProducts() {
         return productArrayList;
     }
 
     public void delProdByID(int id) {
-        int index = 0;
-        for (Product product : productArrayList) {
-            if (product.getId() == id) {
-                productArrayList.remove(index);
-                break;
-            }
-            index++;
-        }
+        productArrayList.removeIf(p -> p.getId() == id);
     }
 
     public Product getProduct(int index) {
@@ -43,15 +28,12 @@ public class Shop {
     }
 
     public void changeProduct(Product product) {
-        int index = 0;
-        for (Product p : productArrayList) {
-            if (p.getId() == product.getId()) {
-                getProduct(index).setPrice(product.getPrice());
-                getProduct(index).setName(product.getName());
-                break;
-            }
-            index++;
-        }
-
+        productArrayList.stream()
+                .filter(product1 -> product1.getId() == product.getId())
+                .forEach(product1 -> {
+                    product1.setPrice(product.getPrice());
+                    product1.setName(product.getName());
+                });
     }
+
 }
