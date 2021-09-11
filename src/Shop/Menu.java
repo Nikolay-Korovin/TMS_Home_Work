@@ -3,6 +3,8 @@ package Shop;
 import java.io.*;
 import java.util.*;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Menu {
     Scanner sc = new Scanner(System.in);
@@ -184,15 +186,19 @@ public class Menu {
     }
 
     //ввести имя продукта
-    private String getNameFromUser() {//можно ещё сделать что бы принимало через пробел
+    private String getNameFromUser() {
+        Scanner scanner = new Scanner(System.in);
+        String name = null;
+        System.out.println("Введите название товара (Слово слово... цифра)");
         while (true) {
-            if (sc.hasNext()) {
-                return sc.next();
+            name = scanner.nextLine();
+            if (isCorrectProductName(name)) {
+                break;
             } else {
-                System.out.println("Введите название товара");
-                sc.next();
+                System.out.println("Введите название товара корректно");
             }
         }
+        return name;
     }
 
     //ввести цену продукта
@@ -213,9 +219,16 @@ public class Menu {
         return isSomethingFind.isPresent();
     }
 
+    //проверка на правильный формат названия товара
+    private boolean isCorrectProductName(String name) {
+        Pattern pattern = Pattern.compile("[А-ЯЁ][а-яё]+\\s?([а-яё]+\\s?)*([0-9]+\\s?)*");
+        Matcher matcher = pattern.matcher(name);
+        return matcher.find();
+    }
+
     //сохранение списка товаров в файл
     private void saveProducts() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/Unit12/file.dat"))) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/Shop/file.dat"))) {
             oos.writeObject(shop.getAllProducts());
         } catch (IOException e) {
             System.out.println("Что то пошло не так");
@@ -224,7 +237,7 @@ public class Menu {
 
     //загрузка списка товаров из файла
     private void loadProducts() {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("src/Unit12/file.dat"))) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("src/Shop/file.dat"))) {
             shop.productArrayList = (ArrayList) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Что то пошло не так");
