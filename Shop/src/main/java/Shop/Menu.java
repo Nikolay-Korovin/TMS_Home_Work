@@ -1,7 +1,5 @@
 package Shop;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.*;
 import java.util.*;
 import java.util.ArrayList;
@@ -11,10 +9,11 @@ import java.util.regex.Pattern;
 public class Menu {
     Scanner sc = new Scanner(System.in);
     Shop shop = new Shop();
+    JsonProductManager jsonProductManager = new JsonProductManager();
 
     //главное меню
     private void startShop() {
-        loadProducts();
+        shop.productArrayList = jsonProductManager.loadProductsFromJson();
         System.out.println("Добро пожаловать в меню магазина!");
         System.out.println("Что бы вы хотели сделать?(введите цифру соответствующую пункту в меню)");
 
@@ -25,8 +24,8 @@ public class Menu {
             System.out.println("2. Добавление товара.");
             System.out.println("3. Редактирование товара.");
             System.out.println("4. Удаление товара.");
-            System.out.println("5. Сохранить.");
-            System.out.println("6. Выйти.");
+            //System.out.println("5. Сохранить.");
+            System.out.println("5. Выйти.");
 
             if (sc.hasNextInt()) {
                 choose = sc.nextInt();
@@ -42,12 +41,12 @@ public class Menu {
                 changeProduct();
             } else if (choose == 4) {
                 deleteProduct();
+//            } else if (choose == 5) {
+//                System.out.println("записали в базу");
+//                saveProducts();
             } else if (choose == 5) {
-                System.out.println("записали в базу");
-                saveProducts();
-            } else if (choose == 6) {
                 System.out.println("ВЫХОД");
-                saveProducts();
+                //saveProducts();
                 break;
             } else {
                 System.out.println("Введите корректный номер из меню");
@@ -115,6 +114,7 @@ public class Menu {
         int price = getPriceFromUser();
 
         shop.changeProduct(new Product(id, name, price));
+        jsonProductManager.saveProductsToJson(shop.getAllProducts());
     }
 
     //добавить продукт
@@ -130,6 +130,7 @@ public class Menu {
         int price = getPriceFromUser();
 
         shop.addProduct(new Product(id, name, price));
+        jsonProductManager.saveProductsToJson(shop.getAllProducts());
     }
 
     //удалить продукт
@@ -141,6 +142,7 @@ public class Menu {
         int id = getIDFromUserForChangeAndDelete();
 
         shop.delProdByID(id);
+        jsonProductManager.saveProductsToJson(shop.getAllProducts());
     }
 
     //запрос айди для метода (добавить продукт)
@@ -234,22 +236,22 @@ public class Menu {
     }
 
     // сохранение списка товаров в файл
-    private void saveProducts() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("Shop/src/main/java/Shop/file.dat"))) {
-            oos.writeObject(shop.getAllProducts());
-        } catch (IOException e) {
-            System.out.println("Что то пошло не так");
-        }
-    }
+//    private void saveProducts() {
+//        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("Shop/src/main/java/Shop/file.dat"))) {
+//            oos.writeObject(shop.getAllProducts());
+//        } catch (IOException e) {
+//            System.out.println("Что то пошло не так");
+//        }
+//    }
 
     //загрузка списка товаров из файла
-    private void loadProducts() {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("Shop/src/main/java/Shop/file.dat"))) {
-            shop.productArrayList = (ArrayList) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Что то пошло не так");
-        }
-    }
+//    private void loadProducts() {
+//        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("Shop/src/main/java/Shop/file.dat"))) {
+//            shop.productArrayList = (ArrayList) ois.readObject();
+//        } catch (IOException | ClassNotFoundException e) {
+//            System.out.println("Что то пошло не так");
+//        }
+//    }
 
 //    private Shop loadProductsFromJson() throws IOException {
 //
