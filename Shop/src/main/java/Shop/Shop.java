@@ -1,18 +1,21 @@
 package Shop;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class Shop {
+
+    public Shop(){}
+    @JsonProperty("Shop")
     public List<Product> productArrayList = new ArrayList<>();
 
     public void addProduct(Product product) {
-        Optional<Product> isSomethingFind = productArrayList.stream().filter(product1 -> product1.getId() == product.getId()).findAny();
-        if (isSomethingFind.isEmpty()) {
-            product.setTimeOfAdd();
-            productArrayList.add(product);
-        }
+        product.setTimeOfAdd(LocalDateTime.now());
+        productArrayList.add(product);
     }
 
     public List<Product> getAllProducts() {

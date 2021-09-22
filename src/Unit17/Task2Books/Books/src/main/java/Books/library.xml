@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<library>
+    <book>
+        <number>1</number>
+        <title>book1</title>
+        <yearOfPublish>1900</yearOfPublish>
+    </book>
+    <book>
+        <number>2</number>
+        <title>book2</title>
+        <yearOfPublish>1902</yearOfPublish>
+    </book>
+</library>

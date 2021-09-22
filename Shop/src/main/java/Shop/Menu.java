@@ -1,5 +1,7 @@
 package Shop;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.*;
 import java.util.*;
 import java.util.ArrayList;
@@ -158,7 +160,7 @@ public class Menu {
                 }
             } else {
                 System.out.println("Введите ID (цифры)");
-                sc.next();
+                sc = new Scanner(System.in);
             }
         }
     }
@@ -180,7 +182,7 @@ public class Menu {
                 }
             } else {
                 System.out.println("Введите ID (цифры)");
-                sc.next();
+                sc = new Scanner(System.in);
             }
         }
     }
@@ -188,7 +190,7 @@ public class Menu {
     //ввести имя продукта
     private String getNameFromUser() {
         Scanner scanner = new Scanner(System.in);
-        String name = null;
+        String name;
         System.out.println("Введите название товара (Слово слово... цифра)");
         while (true) {
             name = scanner.nextLine();
@@ -198,7 +200,7 @@ public class Menu {
                 System.out.println("Введите название товара корректно");
             }
         }
-        return name;
+        return name.trim();
     }
 
     //ввести цену продукта
@@ -208,27 +210,32 @@ public class Menu {
                 return sc.nextInt();
             } else {
                 System.out.println("Введите цену (цифры)");
-                sc.next();
+                sc = new Scanner(System.in);
             }
         }
     }
 
     //проверяет есть ли такой ID
     private boolean isID(int id) {
-        Optional<Product> isSomethingFind = shop.getAllProducts().stream().filter(product1 -> product1.getId() == id).findAny();
-        return isSomethingFind.isPresent();
+        return shop.getAllProducts()
+                .stream()
+                .anyMatch(product1 -> product1.getId() == id);
     }
 
     //проверка на правильный формат названия товара
     private boolean isCorrectProductName(String name) {
-        Pattern pattern = Pattern.compile("[А-ЯЁ][а-яё]+\\s?([а-яё]+\\s?)*([0-9]+\\s?)*");
-        Matcher matcher = pattern.matcher(name);
-        return matcher.find();
+        int end = 0;
+        Pattern pattern = Pattern.compile("^[А-ЯЁA-Z][а-яёa-z]?\\s?([а-яёa-z]+\\s?)*([0-9]+\\s?)*");
+        Matcher matcher = pattern.matcher(name.trim());
+        while (matcher.find()) {
+            end = matcher.end();
+        }
+        return name.length() == end;
     }
 
-    //сохранение списка товаров в файл
+    // сохранение списка товаров в файл
     private void saveProducts() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/Shop/file.dat"))) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("Shop/src/main/java/Shop/file.dat"))) {
             oos.writeObject(shop.getAllProducts());
         } catch (IOException e) {
             System.out.println("Что то пошло не так");
@@ -237,14 +244,34 @@ public class Menu {
 
     //загрузка списка товаров из файла
     private void loadProducts() {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("src/Shop/file.dat"))) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("Shop/src/main/java/Shop/file.dat"))) {
             shop.productArrayList = (ArrayList) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Что то пошло не так");
         }
     }
 
-    public static void main(String[] args) {
+//    private Shop loadProductsFromJson() throws IOException {
+//
+//            String jsonFile = "Shop/src/main/java/Shop/shop.json";
+//            ObjectMapper mapper = new ObjectMapper();
+//
+//
+//        return mapper.readValue(new File(jsonFile), Shop.class);
+//    }
+
+    //    private static void saveProductsToJson(Shop shop) {
+//        try {
+//            String jsonFile = "Shop/src/main/java/Shop/shop.json";
+//            ObjectMapper mapper = new ObjectMapper();
+//            mapper.writeValue(new File(jsonFile), shop);
+//            System.out.println("json created");
+//        }catch (IOException e){
+//            e.printStackTrace();
+//        }
+//    }
+
+    public static void main(String[] args) throws IOException {
         Menu menu = new Menu();
         menu.startShop();
     }

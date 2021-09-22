@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<SimpsonsFamily>
+
+    <member familyStatus ="father">
+        <name>Homer</name>
+        <surname>Simpson</surname>
+        <age>40</age>
+        <work>Atomic Station</work>
+        <food>Donuts</food>
+        <transport>Car</transport>
+    </member>
+
+    <member familyStatus="mother">
+        <name>Marge</name>
+        <surname>Simpson</surname>
+        <maidenname>Bouvier</maidenname>
+        <age>35</age>
+        <work>HouseKeeper</work>
+    </member>
+
+    <member familyStatus="son">
+        <name>Bart</name>
+        <surname>Simpson</surname>
+        <age>10</age>
+        <transport>SkateBoard</transport>
+    </member>
+
+    <member familyStatus="daughter">
+        <name>Lisa</name>
+        <surname>Simpson</surname>
+        <age>8</age>
+    </member>
+
+    <member familyStatus="daughter">
+        <name>Maggy</name>
+        <surname>Simpson</surname>
+        <age>1</age>
+    </member>
+
+</SimpsonsFamily>

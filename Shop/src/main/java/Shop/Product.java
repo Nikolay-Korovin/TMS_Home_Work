@@ -1,5 +1,7 @@
 package Shop;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -7,10 +9,18 @@ import java.util.List;
 
 
 public class Product implements Serializable {
+    @JsonProperty("id")
     private int id;
+    @JsonProperty("name")
     private String name;
+    @JsonProperty("price")
     private int price;
+    @JsonProperty("timeOfAdd")
     private LocalDateTime dateOfAdd;
+
+    public Product(){
+
+    }
 
     public Product(int id, String name, int price) {
         this.id = id;
@@ -18,7 +28,9 @@ public class Product implements Serializable {
         this.price = price;
     }
 
-    public int getId() { return id; }
+    public int getId() {
+        return id;
+    }
 
     public void setId(int id) {
         this.id = id;
@@ -43,9 +55,9 @@ public class Product implements Serializable {
     public LocalDateTime getTimeOfAdd() {
         return dateOfAdd;
     }
-    //почему то не получилось в скобках сделать LocalDateTime.now() не видит .now
-    public void setTimeOfAdd() {
-        this.dateOfAdd = LocalDateTime.now();
+
+    public void setTimeOfAdd(LocalDateTime localDate) {
+        this.dateOfAdd = localDate;
     }
 
     public static void priceSortUP(final List<Product> product) {
@@ -63,7 +75,8 @@ public class Product implements Serializable {
     public static void priceSortChoose(final List<Product> products, int lowPrice, int highPrice) {
 
         products.stream()
-                .filter(product -> product.getPrice() >= lowPrice && product.getPrice() <= highPrice)
+                .filter(product -> product.getPrice() >= lowPrice)
+                .filter(product -> product.getPrice() <= highPrice)
                 .forEach(System.out::println);
     }
 
