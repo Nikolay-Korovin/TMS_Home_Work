@@ -24,7 +24,6 @@ public class Menu {
             System.out.println("2. Добавление товара.");
             System.out.println("3. Редактирование товара.");
             System.out.println("4. Удаление товара.");
-            //System.out.println("5. Сохранить.");
             System.out.println("5. Выйти.");
 
             if (sc.hasNextInt()) {
@@ -41,12 +40,8 @@ public class Menu {
                 changeProduct();
             } else if (choose == 4) {
                 deleteProduct();
-//            } else if (choose == 5) {
-//                System.out.println("записали в базу");
-//                saveProducts();
             } else if (choose == 5) {
                 System.out.println("ВЫХОД");
-                //saveProducts();
                 break;
             } else {
                 System.out.println("Введите корректный номер из меню");
@@ -234,44 +229,6 @@ public class Menu {
         }
         return name.length() == end;
     }
-
-    // сохранение списка товаров в файл
-//    private void saveProducts() {
-//        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("Shop/src/main/java/Shop/file.dat"))) {
-//            oos.writeObject(shop.getAllProducts());
-//        } catch (IOException e) {
-//            System.out.println("Что то пошло не так");
-//        }
-//    }
-
-    //загрузка списка товаров из файла
-//    private void loadProducts() {
-//        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("Shop/src/main/java/Shop/file.dat"))) {
-//            shop.productArrayList = (ArrayList) ois.readObject();
-//        } catch (IOException | ClassNotFoundException e) {
-//            System.out.println("Что то пошло не так");
-//        }
-//    }
-
-//    private Shop loadProductsFromJson() throws IOException {
-//
-//            String jsonFile = "Shop/src/main/java/Shop/shop.json";
-//            ObjectMapper mapper = new ObjectMapper();
-//
-//
-//        return mapper.readValue(new File(jsonFile), Shop.class);
-//    }
-
-    //    private static void saveProductsToJson(Shop shop) {
-//        try {
-//            String jsonFile = "Shop/src/main/java/Shop/shop.json";
-//            ObjectMapper mapper = new ObjectMapper();
-//            mapper.writeValue(new File(jsonFile), shop);
-//            System.out.println("json created");
-//        }catch (IOException e){
-//            e.printStackTrace();
-//        }
-//    }
 
     public static void main(String[] args) throws IOException {
         Menu menu = new Menu();
