@@ -6,9 +6,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.io.*;
-import java.nio.Buffer;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class JsonProductManager {
