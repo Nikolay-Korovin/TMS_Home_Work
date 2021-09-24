@@ -1,8 +1,6 @@
 package Shop;
 
-import java.io.*;
 import java.util.*;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -216,7 +214,7 @@ public class Menu {
     }
 
     //проверяет есть ли такой ID
-    private boolean isID(int id) {
+    public boolean isID(int id) {
         return shop.getAllProducts()
                 .stream()
                 .anyMatch(product1 -> product1.getId() == id);
@@ -233,7 +231,8 @@ public class Menu {
         return name.length() == end;
     }
 
-    private void sellBuyImitation(){
+    //создание и удаление случайных товаров и запись в json
+    private void sellBuyImitation() {
         StressTestProvider stressTestProvider = new StressTestProvider(shop);
         Producer p = new Producer(stressTestProvider);
         Consumer c = new Consumer(stressTestProvider);
