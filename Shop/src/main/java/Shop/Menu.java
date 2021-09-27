@@ -9,10 +9,11 @@ import java.util.regex.Pattern;
 public class Menu {
     Scanner sc = new Scanner(System.in);
     Shop shop = new Shop();
+    JsonProductManager jsonProductManager = new JsonProductManager();
 
     //главное меню
     private void startShop() {
-        loadProducts();
+        shop.productArrayList = jsonProductManager.loadProductsFromJson();
         System.out.println("Добро пожаловать в меню магазина!");
         System.out.println("Что бы вы хотели сделать?(введите цифру соответствующую пункту в меню)");
 
@@ -23,8 +24,7 @@ public class Menu {
             System.out.println("2. Добавление товара.");
             System.out.println("3. Редактирование товара.");
             System.out.println("4. Удаление товара.");
-            System.out.println("5. Сохранить.");
-            System.out.println("6. Выйти.");
+            System.out.println("5. Выйти.");
 
             if (sc.hasNextInt()) {
                 choose = sc.nextInt();
@@ -41,11 +41,7 @@ public class Menu {
             } else if (choose == 4) {
                 deleteProduct();
             } else if (choose == 5) {
-                System.out.println("записали в базу");
-                saveProducts();
-            } else if (choose == 6) {
                 System.out.println("ВЫХОД");
-                saveProducts();
                 break;
             } else {
                 System.out.println("Введите корректный номер из меню");
@@ -113,6 +109,7 @@ public class Menu {
         int price = getPriceFromUser();
 
         shop.changeProduct(new Product(id, name, price));
+        jsonProductManager.saveProductsToJson(shop.getAllProducts());
     }
 
     //добавить продукт
@@ -128,6 +125,7 @@ public class Menu {
         int price = getPriceFromUser();
 
         shop.addProduct(new Product(id, name, price));
+        jsonProductManager.saveProductsToJson(shop.getAllProducts());
     }
 
     //удалить продукт
@@ -139,6 +137,7 @@ public class Menu {
         int id = getIDFromUserForChangeAndDelete();
 
         shop.delProdByID(id);
+        jsonProductManager.saveProductsToJson(shop.getAllProducts());
     }
 
     //запрос айди для метода (добавить продукт)
@@ -158,7 +157,7 @@ public class Menu {
                 }
             } else {
                 System.out.println("Введите ID (цифры)");
-                sc.next();
+                sc = new Scanner(System.in);
             }
         }
     }
@@ -180,7 +179,7 @@ public class Menu {
                 }
             } else {
                 System.out.println("Введите ID (цифры)");
-                sc.next();
+                sc = new Scanner(System.in);
             }
         }
     }
@@ -188,7 +187,7 @@ public class Menu {
     //ввести имя продукта
     private String getNameFromUser() {
         Scanner scanner = new Scanner(System.in);
-        String name = null;
+        String name;
         System.out.println("Введите название товара (Слово слово... цифра)");
         while (true) {
             name = scanner.nextLine();
@@ -198,7 +197,7 @@ public class Menu {
                 System.out.println("Введите название товара корректно");
             }
         }
-        return name;
+        return name.trim();
     }
 
     //ввести цену продукта
@@ -208,43 +207,30 @@ public class Menu {
                 return sc.nextInt();
             } else {
                 System.out.println("Введите цену (цифры)");
-                sc.next();
+                sc = new Scanner(System.in);
             }
         }
     }
 
     //проверяет есть ли такой ID
     private boolean isID(int id) {
-        Optional<Product> isSomethingFind = shop.getAllProducts().stream().filter(product1 -> product1.getId() == id).findAny();
-        return isSomethingFind.isPresent();
+        return shop.getAllProducts()
+                .stream()
+                .anyMatch(product1 -> product1.getId() == id);
     }
 
     //проверка на правильный формат названия товара
     private boolean isCorrectProductName(String name) {
-        Pattern pattern = Pattern.compile("[А-ЯЁ][а-яё]+\\s?([а-яё]+\\s?)*([0-9]+\\s?)*");
-        Matcher matcher = pattern.matcher(name);
-        return matcher.find();
-    }
-
-    //сохранение списка товаров в файл
-    private void saveProducts() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/Shop/file.dat"))) {
-            oos.writeObject(shop.getAllProducts());
-        } catch (IOException e) {
-            System.out.println("Что то пошло не так");
+        int end = 0;
+        Pattern pattern = Pattern.compile("^[А-ЯЁA-Z][а-яёa-z]?\\s?([а-яёa-z]+\\s?)*([0-9]+\\s?)*");
+        Matcher matcher = pattern.matcher(name.trim());
+        while (matcher.find()) {
+            end = matcher.end();
         }
+        return name.length() == end;
     }
 
-    //загрузка списка товаров из файла
-    private void loadProducts() {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("src/Shop/file.dat"))) {
-            shop.productArrayList = (ArrayList) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Что то пошло не так");
-        }
-    }
-
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Menu menu = new Menu();
         menu.startShop();
     }
