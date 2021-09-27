@@ -1,8 +1,6 @@
 package Shop;
 
-import java.io.*;
 import java.util.*;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,7 +22,8 @@ public class Menu {
             System.out.println("2. Добавление товара.");
             System.out.println("3. Редактирование товара.");
             System.out.println("4. Удаление товара.");
-            System.out.println("5. Выйти.");
+            System.out.println("5. Имитация деятельности.");
+            System.out.println("6. Выйти.");
 
             if (sc.hasNextInt()) {
                 choose = sc.nextInt();
@@ -41,6 +40,8 @@ public class Menu {
             } else if (choose == 4) {
                 deleteProduct();
             } else if (choose == 5) {
+                sellBuyImitation();
+            } else if (choose == 6) {
                 System.out.println("ВЫХОД");
                 break;
             } else {
@@ -213,7 +214,7 @@ public class Menu {
     }
 
     //проверяет есть ли такой ID
-    private boolean isID(int id) {
+    public boolean isID(int id) {
         return shop.getAllProducts()
                 .stream()
                 .anyMatch(product1 -> product1.getId() == id);
@@ -230,7 +231,16 @@ public class Menu {
         return name.length() == end;
     }
 
-    public static void main(String[] args) throws IOException {
+    //создание и удаление случайных товаров и запись в json
+    private void sellBuyImitation() {
+        StressTestProvider stressTestProvider = new StressTestProvider(shop);
+        Producer p = new Producer(stressTestProvider);
+        Consumer c = new Consumer(stressTestProvider);
+        new Thread(p).start();
+        new Thread(c).start();
+    }
+
+    public static void main(String[] args) {
         Menu menu = new Menu();
         menu.startShop();
     }
