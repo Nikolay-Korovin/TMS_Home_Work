@@ -12,10 +12,10 @@ import java.util.ArrayList;
 
 public class Main {
     private final static String jsonFile = "src/Unit17/Task2Books/Books/src/main/java/Books/library.json";
+    private final static String xmlFile = "src/Unit17/Task2Books/Books/src/main/java/Books/library.xml";
 
     public static void main(String[] args) throws JAXBException, IOException {
         Library library = new Library();
-        library.setBookList(new ArrayList<>());
 
         Book book1 = new Book();
         book1.setNumber(1);
@@ -39,13 +39,13 @@ public class Main {
         JAXBContext jaxbContext = JAXBContext.newInstance(Library.class);
         Marshaller marshaller = jaxbContext.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        marshaller.marshal(library, new File("src/Unit17/Task2Books/Books/src/main/java/Books/library.xml"));
+        marshaller.marshal(library, new File(xmlFile));
     }
 
     private static void unMarshalingLibrary() throws JAXBException {
         JAXBContext jaxbContext = JAXBContext.newInstance(Library.class);
         Unmarshaller Unmarshaller = jaxbContext.createUnmarshaller();
-        Library books = (Library) Unmarshaller.unmarshal(new File("src/Unit17/Task2Books/Books/src/main/java/Books/library.xml"));
+        Library books = (Library) Unmarshaller.unmarshal(new File(xmlFile));
 
         for (Book book : books.getBookList()) {
             System.out.println(book.getNumber());

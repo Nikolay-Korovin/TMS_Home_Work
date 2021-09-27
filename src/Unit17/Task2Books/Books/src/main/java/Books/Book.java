@@ -17,7 +17,7 @@ public class Book {
     private String title;
     @JsonProperty("year")
     private int yearOfPublish;
-    @JsonIgnore
+
     private List<Book> bookList;
 
     public Book() {

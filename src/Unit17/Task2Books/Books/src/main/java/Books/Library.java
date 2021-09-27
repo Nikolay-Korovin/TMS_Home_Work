@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
 import java.util.List;
 
 @XmlRootElement(name = "library")
@@ -13,7 +14,7 @@ import java.util.List;
 public class Library {
     @JsonProperty("library")
     @XmlElement(name = "book")
-    private List<Book> bookList = null;
+    private List<Book> bookList = new ArrayList<>();
 
     public List<Book> getBookList() {
         return bookList;
